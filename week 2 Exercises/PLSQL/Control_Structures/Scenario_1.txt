@@ -1,0 +1,7 @@
+UPDATE Loans
+SET interestRate = interestRate - 0.01
+WHERE CustomerID IN (
+    Select CustomerID
+    FROM Customers 
+WHERE EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM DOB) > 60
+);

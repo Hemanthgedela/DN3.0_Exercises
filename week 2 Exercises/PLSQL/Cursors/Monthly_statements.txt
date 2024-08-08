@@ -1,0 +1,27 @@
+DECLARE
+    CURSOR GenerateMonthlyStatements IS
+        SELECT c.CustomerID, c.Name, t.TransactionID, t.TransactionDate, t.Amount, t.TransactionType
+        FROM Customers c
+        JOIN Accounts a ON c.CustomerID = a.CustomerID
+        JOIN Transactions t ON a.AccountID = t.AccountID
+        WHERE t.TransactionDate BETWEEN TRUNC(SYSDATE, 'MM') AND LAST_DAY(SYSDATE);
+    
+    v_CustomerID Customers.CustomerID%TYPE;
+    v_Name Customers.Name%TYPE;
+    v_TransactionID Transactions.TransactionID%TYPE;
+    v_TransactionDate Transactions.TransactionDate%TYPE;
+    v_Amount Transactions.Amount%TYPE;
+    v_TransactionType Transactions.TransactionType%TYPE;
+BEGIN
+    FOR rec IN GenerateMonthlyStatements LOOP
+        -- Print or output the statement
+        DBMS_OUTPUT.PUT_LINE('CustomerID: ' || rec.CustomerID);
+        DBMS_OUTPUT.PUT_LINE('Customer Name: ' || rec.Name);
+        DBMS_OUTPUT.PUT_LINE('Transaction ID: ' || rec.TransactionID);
+        DBMS_OUTPUT.PUT_LINE('Transaction Date: ' || TO_CHAR(rec.TransactionDate, 'YYYY-MM-DD'));
+        DBMS_OUTPUT.PUT_LINE('Amount: ' || rec.Amount);
+        DBMS_OUTPUT.PUT_LINE('Transaction Type: ' || rec.TransactionType);
+        DBMS_OUTPUT.PUT_LINE('next customer');
+    END LOOP;
+END;
+

@@ -1,0 +1,18 @@
+CREATE OR REPLACE PROCEDURE UpdateEmployeeBonus(
+    p_Department IN VARCHAR2,
+    p_BonusPercentage IN NUMBER) IS
+BEGIN
+  
+    IF p_BonusPercentage <= 0 THEN
+        RAISE_APPLICATION_ERROR(-40002, 'Bonus percentage must be greater than zero.');
+    END IF;
+
+ 
+    UPDATE Employees
+    Set Salary = Salary * (1 + p_BonusPercentage / 100)
+    WHERE Department = p_Department;
+
+   
+    COMMIT;
+END UpdateEmployeeBonus;
+/

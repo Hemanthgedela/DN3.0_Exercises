@@ -1,0 +1,22 @@
+DECLARE
+    CURSOR UpdateLoanInterestRates IS
+        SELECT LoanID, InterestRate
+        FROM Loans;
+    
+    v_LoanID Loans.LoanID%TYPE;
+    v_OldInterestRate Loans.InterestRate%TYPE;
+    new_interest_rate CONSTANT NUMBER;
+BEGIN
+    FOR rec IN UpdateLoanInterestRates LOOP
+        v_LoanID := rec.LoanID;
+        v_OldInterestRate := rec.InterestRate;
+        
+       
+        UPDATE Loans
+        SET InterestRate = new_interest_rate
+        WHERE LoanID = v_LoanID;
+        
+        DBMS_OUTPUT.PUT_LINE('LoanID: ' || v_LoanID || ' updated. Interest rate changed from ' || v_OldInterestRate || ' to ' || new_interest_rate);
+    END LOOP;
+END;
+

@@ -1,0 +1,27 @@
+CREATE OR REPLACE PROCEDURE UpdateSalary(
+    p_EmployeeID IN NUMBER,
+    p_Percentage IN NUMBER
+) IS
+    v_NewSalary NUMBER;
+BEGIN
+   
+    IF p_Percentage <= 0 THEN
+        RAISE_APPLICATION_ERROR(-4004, 'the Percentage must be greater than zero.');
+    END IF;
+
+    
+    SELECT Salary INTO v_NewSalary FROM Employees 
+      WHERE EmployeeID = p_EmployeeID FOR UPDATE;
+    v_NewSalary := v_NewSalary * (1 + p_Percentage / 100);
+
+    
+    UPDATE Employees SET Salary = v_NewSalary 
+    WHERE EmployeeID = p_EmployeeID;
+
+   
+    COMMIT;
+EXCEPTION  WHEN NO_DATA_FOUND THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-4005, 'The Employee ID does not exist.');
+    END UpdateSalary;
+/

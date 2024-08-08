@@ -1,0 +1,3 @@
+Select CustomerID, LoanID, EndDate
+FROM Loans
+Where EndDate Between CURRENT_DATE AND CURRENT_DATE + INTERVAL '30' DAY;
